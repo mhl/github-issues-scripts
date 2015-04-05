@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# # -*- coding: utf-8 -*-
 
 import doctest
 import errno
@@ -116,7 +117,9 @@ def main(repo):
                 # Increase the indent level of any Markdown heading
                 body = re.sub(r'^(#+)', r'#\1', body)
                 body = replace_images(body)
-                f.write(body.encode('utf-8'))
+                body = body.encode('utf-8')
+                body = re.sub(r'✓', '[tick replaced]', body)
+                f.write(body)
                 f.write("\n\n")
                 if issue['comments'] > 0:
                     comments_request = requests.get(issue['comments_url'],
