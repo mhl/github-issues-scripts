@@ -111,6 +111,8 @@ def main(repo):
             if 'pull_request' in issue and issue['pull_request']['html_url']:
                 continue
 
+            print "Doing issue", number, title
+
             with open(md_filename, 'w') as f:
                 f.write(u"# {0} {1}\n\n".format(number, title).encode('utf-8'))
                 f.write("### Reported by {0}\n\n".format(issue['user']['login']))
