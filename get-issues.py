@@ -108,7 +108,7 @@ def main(repo):
             ntf = tempfile.NamedTemporaryFile(suffix='.md', delete=False)
             md_filename = ntf.name
 
-            if issue['pull_request']['html_url']:
+            if 'pull_request' in issue and issue['pull_request']['html_url']:
                 continue
 
             with open(md_filename, 'w') as f:
