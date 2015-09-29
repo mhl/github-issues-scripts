@@ -5,6 +5,7 @@
 # This script is distributed under the terms of the GNU General Public License.
 # See the COPYING file in this repository for the complete text of the license.
 
+from distutils import spawn
 import doctest
 import errno
 import hashlib
@@ -19,6 +20,10 @@ import sys
 import tempfile
 
 from github import standard_headers, get_issues
+
+if not spawn.find_executable('pandoc'):
+    print >> sys.stderr, "pandoc couldn't be found on PATH"
+    sys.exit(1)
 
 # This is a script that downloads all the GitHub issues in a
 # particular repository and generates a PDF for each one; the idea is
