@@ -34,3 +34,5 @@ def get_issues(repo, state='open'):
         page += 1
         if 'Link' not in r.headers:
             break
+        if 'rel="next"' not in r.headers['Link']:
+            break
