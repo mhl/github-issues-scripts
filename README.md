@@ -88,6 +88,18 @@ there for each open issue in the repository. We found this
 useful for
 [printing out every open issue in a repository to triage them](http://longair.net/blog/2014/02/16/printing-out-github-issues-for-triage-or-estimation/).
 
+Note that pandoc needs a lot of texlive to be installed for it
+to generate PDFs - I needed to install the following:
+
+```
+sudo apt-get install \
+    texlive-fonts-recommended \
+    texlive-latex-base \
+    texlive-latex-extra \
+    texlive-latex-recommended \
+    texlive-xetex
+```
+
 Of course, some of these PDFs may be more than one page. To
 print out just the first page of each, 4 to an A4 side, I did
 this:
