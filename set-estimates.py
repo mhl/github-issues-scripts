@@ -8,11 +8,7 @@ import os
 from os.path import dirname, join, realpath
 import requests
 
-with open(join(os.environ['HOME'], '.github-oauth-token-new.json')) as f:
-    token = json.load(f)['token']
-
-standard_headers = {'User-Agent': 'github-issues-printer/1.0',
-                    'Authorization': 'bearer {0}'.format(token)}
+from github import standard_headers
 
 cwd = os.getcwd()
 repo_directory = realpath(join(dirname(__file__)))

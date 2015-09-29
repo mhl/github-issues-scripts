@@ -18,16 +18,12 @@ import subprocess
 import sys
 import tempfile
 
+from github import standard_headers, get_issues
+
 # This is a script that downloads all the GitHub issues in a
 # particular repository and generates a PDF for each one; the idea is
 # to produce easily printable versions of all the issues for a
 # repository.
-
-with open(join(os.environ['HOME'], '.github-oauth-token.json')) as f:
-    token = json.load(f)['token']
-
-standard_headers = {'User-Agent': 'github-issues-printer/1.0',
-                    'Authorization': 'bearer {0}'.format(token)}
 
 cwd = os.getcwd()
 repo_directory = realpath(join(dirname(__file__)))
