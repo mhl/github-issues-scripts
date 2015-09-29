@@ -60,7 +60,7 @@ def replace_image(match, download=True):
     Download the image and return a version of the tag rewritten
     to refer to the local version.  The local version is named
     after the MD5sum of the URL.
-    
+
     >>> m = re.search(r'\!\[(.*?)\]\((.*?)\)',
     ...               'an image coming up ![caption](http://blah/a/foo.png)')
     >>> replace_image(m, download=False)
@@ -99,7 +99,7 @@ def main(repo):
                                     '{}.pdf'.format(number))
         if exists(pdf_filename):
             continue
-        
+
         ntf = tempfile.NamedTemporaryFile(suffix='.md', delete=False)
         md_filename = ntf.name
 
