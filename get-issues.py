@@ -123,6 +123,8 @@ def main(repo):
                 for comment in comments_request.json():
                     f.write("### Comment from {0}\n\n".format(comment['user']['login']))
                     comment_body = comment['body']
+                    # Make sure any headings in comments are less
+                    # prominent than those we create around the comment.
                     comment_body = re.sub(r'^(#+)', r'###\1', comment_body)
                     comment_body = replace_images(comment_body)
                     f.write(comment_body.encode('utf-8'))
