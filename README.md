@@ -57,7 +57,7 @@ rather than estimating hours, say.)
 
 Once you've arrived at a consensus, you'll want to add those
 estimates to the GitHub issues as labels of the form
-'Difficulty 3`, 'Difficulty 5`, etc. There's another script in
+`Difficulty 3`, `Difficulty 5`, etc. There's another script in
 this repository to help with this, called `set-estimates.py`.
 
 First, download just the 'Consensus' sheet of your estimation
