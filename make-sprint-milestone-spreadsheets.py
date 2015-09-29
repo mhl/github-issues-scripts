@@ -42,7 +42,7 @@ def issues_sort_key(issue):
     closed_at = issue['closed_at']
     return (state_number, closed_at)
 
-def main(repo):
+def main(repo, days_in_a_sprint):
 
     milestone_due_dates = {}
     milestone_start_dates = {}
@@ -61,7 +61,7 @@ def main(repo):
             if title.startswith('Sprint'):
                 due_date = dateutil.parser.parse(milestone['due_on']) + \
                     datetime.timedelta(hours=4)
-                start_date = due_date - datetime.timedelta(days=7)
+                start_date = due_date - datetime.timedelta(days=days_in_a_sprint)
                 milestone_start_dates[title] = start_date
                 milestone_due_dates[title] = due_date
 
@@ -125,7 +125,7 @@ def main(repo):
                                  issue['difficulty'],
                                  issue['title']])
 
-usage = """Usage: %prog [options] REPOSITORY
+usage = """Usage: %prog [options] REPOSITORY DAYS-IN-A-SPRINT
 
 Repository should be username/repository from GitHub, e.g. mysociety/pombola"""
 parser = OptionParser(usage=usage)
@@ -138,7 +138,7 @@ parser.add_option("-t", "--test",
 if options.test:
     doctest.testmod()
 else:
-    if len(args) != 1:
+    if len(args) != 2:
         parser.print_help()
     else:
-        main(args[0])
+        main(args[0], int(args[1]))
