@@ -30,6 +30,14 @@ if not spawn.find_executable('pandoc'):
 # to produce easily printable versions of all the issues for a
 # repository.
 
+# To get pandoc to produce PDFs, I also needed to install:
+#
+#  texlive-fonts-recommended
+#  texlive-latex-base
+#  texlive-latex-extra
+#  texlive-latex-recommended
+#  texlive-xetex
+
 cwd = os.getcwd()
 repo_directory = realpath(join(dirname(__file__)))
 images_directory = relpath(join(repo_directory, 'images'), cwd)
