@@ -10,6 +10,9 @@ import requests
 
 from github import standard_headers
 
+# This script takes a CSV file and uses the data in it to set labels
+# on tickets to indicate their difficulty.
+
 cwd = os.getcwd()
 repo_directory = realpath(join(dirname(__file__)))
 
