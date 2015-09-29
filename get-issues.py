@@ -115,7 +115,6 @@ def main(repo):
             body = re.sub(r'^(#+)', r'#\1', body or '')
             body = replace_images(body)
             body = body.encode('utf-8')
-            body = re.sub(r'✓', '[tick replaced]', body)
             f.write(body)
             f.write("\n\n")
             if issue['comments'] > 0:
@@ -130,6 +129,7 @@ def main(repo):
                     f.write("\n\n")
 
         subprocess.check_call(['pandoc',
+                               '--latex-engine=xelatex',
                                '-f',
                                'markdown_github',
                                md_filename,
