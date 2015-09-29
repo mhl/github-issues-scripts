@@ -105,7 +105,7 @@ def main(repo, developers):
                     original_column_index + 2 * i,
                     Formula(formula_text))
 
-    workbook.save('example.xls')
+    workbook.save('estimates.xls')
 
 usage = """Usage: %prog [options] REPOSITORY DEVELOPER_A DEVELOPER_B ...
 
