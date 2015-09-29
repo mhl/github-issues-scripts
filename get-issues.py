@@ -112,7 +112,7 @@ def main(repo):
             f.write(u"# {0} {1}\n\n".format(number, title).encode('utf-8'))
             f.write("### Reported by {0}\n\n".format(issue['user']['login']))
             # Increase the indent level of any Markdown heading
-            body = re.sub(r'^(#+)', r'#\1', body)
+            body = re.sub(r'^(#+)', r'#\1', body or '')
             body = replace_images(body)
             body = body.encode('utf-8')
             body = re.sub(r'✓', '[tick replaced]', body)
