@@ -9,7 +9,6 @@ from distutils import spawn
 import doctest
 import errno
 import hashlib
-import json
 from optparse import OptionParser
 import os
 from os.path import dirname, exists, isdir, join, realpath, relpath, splitext
@@ -94,71 +93,51 @@ def replace_images(md):
 
 def main(repo):
 
-    page = 1
-    while True:
-        issues_url = 'https://api.github.com/repos/{0}/issues'.format(repo)
-        r = requests.get(issues_url,
-                         params={'per_page': '100',
-                                 'page': str(page),
-                                 'state': 'open'},
-                         headers=standard_headers)
-        if r.status_code != 200:
-            raise Exception, "HTTP status {0} on fetching {1}".format(
-                r.status_code,
-                issues_url)
+    for number, title, body, issue in get_issues(repo):
 
-        issues_json = r.json()
-        for issue in issues_json:
-            number = issue['number']
-            pdf_filename = join(pdfs_directory,
-                                        '{}.pdf'.format(number))
-            if exists(pdf_filename):
-                continue
+        pdf_filename = join(pdfs_directory,
+                                    '{}.pdf'.format(number))
+        if exists(pdf_filename):
+            continue
         
-            title = issue['title']
-            body = issue['body']
+        ntf = tempfile.NamedTemporaryFile(suffix='.md', delete=False)
+        md_filename = ntf.name
 
-            ntf = tempfile.NamedTemporaryFile(suffix='.md', delete=False)
-            md_filename = ntf.name
+        if 'pull_request' in issue and issue['pull_request']['html_url']:
+            continue
 
-            if 'pull_request' in issue and issue['pull_request']['html_url']:
-                continue
+        print "Doing issue", number, title
 
-            print "Doing issue", number, title
+        with open(md_filename, 'w') as f:
+            f.write(u"# {0} {1}\n\n".format(number, title).encode('utf-8'))
+            f.write("### Reported by {0}\n\n".format(issue['user']['login']))
+            # Increase the indent level of any Markdown heading
+            body = re.sub(r'^(#+)', r'#\1', body)
+            body = replace_images(body)
+            body = body.encode('utf-8')
+            body = re.sub(r'✓', '[tick replaced]', body)
+            f.write(body)
+            f.write("\n\n")
+            if issue['comments'] > 0:
+                comments_request = requests.get(issue['comments_url'],
+                                                headers=standard_headers)
+                for comment in comments_request.json():
+                    f.write("### Comment from {0}\n\n".format(comment['user']['login']))
+                    comment_body = comment['body']
+                    comment_body = re.sub(r'^(#+)', r'###\1', comment_body)
+                    comment_body = replace_images(comment_body)
+                    f.write(comment_body.encode('utf-8'))
+                    f.write("\n\n")
 
-            with open(md_filename, 'w') as f:
-                f.write(u"# {0} {1}\n\n".format(number, title).encode('utf-8'))
-                f.write("### Reported by {0}\n\n".format(issue['user']['login']))
-                # Increase the indent level of any Markdown heading
-                body = re.sub(r'^(#+)', r'#\1', body)
-                body = replace_images(body)
-                body = body.encode('utf-8')
-                body = re.sub(r'✓', '[tick replaced]', body)
-                f.write(body)
-                f.write("\n\n")
-                if issue['comments'] > 0:
-                    comments_request = requests.get(issue['comments_url'],
-                                                    headers=standard_headers)
-                    for comment in comments_request.json():
-                        f.write("### Comment from {0}\n\n".format(comment['user']['login']))
-                        comment_body = comment['body']
-                        comment_body = re.sub(r'^(#+)', r'###\1', comment_body)
-                        comment_body = replace_images(comment_body)
-                        f.write(comment_body.encode('utf-8'))
-                        f.write("\n\n")
+        subprocess.check_call(['pandoc',
+                               '-f',
+                               'markdown_github',
+                               md_filename,
+                               '-o',
+                               pdf_filename])
 
-            subprocess.check_call(['pandoc',
-                                   '-f',
-                                   'markdown_github',
-                                   md_filename,
-                                   '-o',
-                                   pdf_filename])
+        os.remove(ntf.name)
 
-            os.remove(ntf.name)
-
-        page += 1
-        if 'Link' not in r.headers:
-            break
 
 usage = """Usage: %prog [options] REPOSITORY
 
