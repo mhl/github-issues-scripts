@@ -75,12 +75,12 @@ GitHub, e.g.
 
 ## Create a PDF file of every open issue in a respository
 
-### make-sprint-milestone-spreadsheets.py
+### get-pdfs-of-issues.py
 
 If you run this script against a repository, e.g. with:
 
 ```
-./make-sprint-milestone-spreadsheets.py mysociety/yournextrepresentative
+./get-pdfs-of-issues.py mysociety/yournextrepresentative
 ```
 
 ... it's make a `pdfs` subdirectory and generate one PDF in
